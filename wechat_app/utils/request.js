@@ -1,4 +1,4 @@
-var HOST_NAME = 'http://127.0.0.1:8000'
+var HOST_NAME = 'https://nmxcx.applinzi.com'
 var URL = {
     wx_login: '/wx_login',
 
