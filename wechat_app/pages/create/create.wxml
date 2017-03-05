@@ -1,0 +1,14 @@
+<!--index.wxml-->
+<view class="container">
+  <view class="title-background">
+    <text class="title-button" bindtap="handleCancle">取消</text>
+    <text class="title-text">发新卡片</text>
+    <text class="title-button" bindtap="handlePost">发送</text>
+  </view>
+  <textarea class="wrting-area" placeholder="说说我们学校的那些事儿" placeholder-class="writing-placehoder" maxlength="200" bindinput="handleInput"/>
+  <view class="writing-info">
+    <text>{{length}}/200</text>
+    <text>已匿名</text>
+  </view>
+  
+</view>

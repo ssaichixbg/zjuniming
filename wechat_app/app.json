@@ -1,0 +1,12 @@
+{
+  "pages":[
+    "pages/index/index",
+    "pages/create/create"
+  ],
+  "window":{
+    "backgroundTextStyle":"light",
+    "navigationBarBackgroundColor": "#23d5b1",
+    "navigationBarTitleText": "匿名树洞",
+    "navigationBarTextStyle":"#ffffff"
+  }
+}

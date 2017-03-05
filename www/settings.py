@@ -37,17 +37,18 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'niming',
 )
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    #'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
+    #'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.middleware.security.SecurityMiddleware',
+    #'django.middleware.security.SecurityMiddleware',
 )
 
 ROOT_URLCONF = 'www.urls'
@@ -73,9 +74,19 @@ WSGI_APPLICATION = 'www.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
-from sae.const import (MYSQL_HOST, MYSQL_HOST_S,
-    MYSQL_PORT, MYSQL_USER, MYSQL_PASS, MYSQL_DB
-)
+MYSQL_HOST = '127.0.0.1'
+MYSQL_PORT = '3306'
+MYSQL_USER = 'root'
+MYSQL_PASS = '123456'
+MYSQL_DB   = 'niming'
+
+if 'SERVER_SOFTWARE' in os.environ:
+    import sae.const
+    MYSQL_DB = sae.const.MYSQL_DB
+    MYSQL_HOST = sae.const.MYSQL_HOST
+    MYSQL_USER = sae.const.MYSQL_USER
+    MYSQL_PASS = sae.const.MYSQL_PASS
+    MYSQL_PORT = sae.const.MYSQL_PORT
 
 DATABASES = {
     'default': {
@@ -107,3 +118,4 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR,'static')

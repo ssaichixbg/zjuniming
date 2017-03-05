@@ -16,6 +16,19 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 
+from niming import views as niming_views
+
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
+
+    url(r'wx_login', niming_views.wx_login),
+
+    url(r'topic/post', niming_views.post_topic),
+    url(r'topic/fetch', niming_views.fetch_topics),
+    url(r'topic/vote', niming_views.vote_topic),
+
+    url(r'topic/post_comment', niming_views.post_comment_on_topic),
+    url(r'comment/post_comment', niming_views.post_comment_on_comment),
+
+    url(r'comment/vote', niming_views.vote_comment),
 ]

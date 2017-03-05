@@ -1,0 +1,79 @@
+<!--index.wxml-->
+<view class="container">
+  <view class="title-background">
+    <text class="title-text">{{usr.position}}</text>
+  </view>
+  <view class="order-pattern" bindtap="orderChange">
+    <view class="order-layer-0">
+      <image mode="aspectFit" class="order-back" src="../../resources/order_back.png"></image>
+    </view> 
+    <view class="order-layer-1">
+      <image mode="aspectFit" class="order-front {{orderClass[order]}}" src="../../resources/order_front.png"></image>
+    </view>
+    <view class="order-layer-2">
+      <image mode="aspectFit" class="order-icon" src="../../resources/order_fresh.png"></image>
+      <image mode="aspectFit" class="order-icon" src="../../resources/order_heat.png"></image>
+    </view>
+  </view>
+  <scroll-view scroll-y="true" class="content" bindtouchmove="handleTouchMove" bindtouchend="handleTouchEnd" bindtouchstart="handleTouchStart" bindscrolltolower="handleScrollToLower" style="margin-right:{{contentRight}}px;margin-left:{{contentLeft}}px;{{commentDisplay?'height:960rpx':null}}">
+    <view class="card">
+      <view class="card-function">
+        <image bindtap="openConfirm" mode="aspectFit" class="card-icon-warn" src="../../resources/icon_warn.png"></image>
+        <text class="card-function-share" bindtap="shareHindShow">分享</text>
+      </view>
+      <view class="card-content">
+        <view class="card-text">
+          <text>{{card.text}}</text>
+        </view>
+        <view class="card-vote">
+          <image mode="aspectFit" class="card-icon-direction" src="../../resources/icon_up.png"></image>
+          <view class="card-vote-number"><text>{{card.vote.number}}</text></view>
+          <image mode="aspectFit" class="card-icon-direction" src="../../resources/icon_down.png"></image>
+        </view>
+      </view>
+    </view>
+    <view wx:if="{{!commentDisplay}}" class="comment">
+      <text class="comment-hint" bindtap="handleCommentDisplay" >查看全部 <text class="comment-mark">{{comment.number}}</text> 条评论</text> 
+    </view>
+    <view wx:else class="comment">
+      <text class="comment-hint" bindtap="handleCommentDisplay">收起评论</text> 
+      <view class="comment-list">
+        <view class="comment-item" wx:for="{{comment.list}}" wx:key="{{id}}" data-index="{{index}}">
+            <view class="comment-info">
+              <text class="comment-author">{{item.from}} <text class="comment-mark">回复</text> {{item.to}}</text>
+              <view class="comment-like" data-index="{{index}}">
+                <image wx:if="{{item.islike}}" src="../../resources/icon_like_dark.png"></image>
+                <image wx:else src="../../resources/icon_like_light.png"></image>
+                <text>{{item.like}}</text>
+              </view>
+            </view>
+            <view class="comment-content">
+              {{item.content}}
+            </view>
+            <view class="comment-time">
+              {{item.time}}
+            </view>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+  <view class="operation">
+    <image mode="aspectFit" class="card-button-operation" src="../../resources/button_message.png"></image>
+    <image wx:if="{{commentDisplay}}" style="{{animationStyleArray[animationStyleIndex]}}" mode="aspectFit" class="card-button-operation" bindtap="desireComment" src="../../resources/button_comment.png"></image>
+    <image mode="aspectFit" class="card-button-operation" bindtap="routeToCreate" src="../../resources/button_add.png"></image>
+  </view>
+
+  <!--may display-->
+  <image id="background" src="../../resources/background.png" bindtap="backgroundHide" wx:if="{{backgroundDisplay}}"></image>
+  <view wx:if="{{shareHintDisplay}}">
+    <image id="sharePointer" src="../../resources/share_pointer.png" ></image>
+    <text id="shareHintText">点这里，选“分享”</text>
+  </view>
+  <view class="comment-panel" wx:if="{{isCommenting}}">
+    <input placeholder="说点什么" placeholder-class ="comment-panel-placeholder" class="comment-panel-input"></input>
+    <view class="comment-panel-operation">
+      <text class="comment-panel-operation-1" bindtap="commentCancel">取消</text>
+      <text class="comment-panel-operation-2" bindtap="commentSubmit">发布</text>
+    </view>
+  </view>
+</view>

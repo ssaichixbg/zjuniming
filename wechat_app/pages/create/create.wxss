@@ -1,0 +1,47 @@
+/**index.wxss**/
+.container{
+  background: #ffffff;
+}
+
+/***title***/
+.title-background{
+   justify-content: space-between;
+}
+.title-button{
+  font-size:30rpx;
+  color:#ffffff;
+  letter-spacing:0;
+  line-height: 70rpx;
+  margin: 0 28rpx;
+}
+
+/***writing***/
+textarea{
+  font-size:34rpx;
+  letter-spacing:0;
+  text-align:left;
+  width: 690rpx;
+  height: 100%;
+  margin: 30rpx;
+  margin-left: 30rpx;
+  margin-right: 30rpx;
+  color:#111111;
+}
+.writing-placeholder{
+  font-size:34rpx;
+  color:#e7e7e7;
+  letter-spacing:0;
+  text-align:left;
+}
+.writing-info{
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  font-size:30rpx;
+  color:#9b9b9b;
+  letter-spacing:0;
+}
+.writing-info>text{
+  margin: 30rpx 30rpx 30rpx 0;
+}
