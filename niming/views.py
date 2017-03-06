@@ -7,6 +7,7 @@ from django.http.request import HttpRequest
 
 from models import *
 
+
 def require_login(func):
     @json_response
     def dec(request, *args, **kwargs):
@@ -103,10 +104,12 @@ def fetch_topics(request):
         'data': topics
     }
 
+
+@require_login
 def vote_topic(request):
     topic_id = request.GET.get('topic_id')
     topic = Topic.get_by_id(topic_id)
-    type = request.GET.get('type', '1')
+    vote_type = request.GET.get('type', '1')
 
     if not topic:
         return False
@@ -114,12 +117,14 @@ def vote_topic(request):
     vote = VoteOnTopic()
     vote.creator = request.current_user
     vote.topic = topic
-    vote.vote_type = int(type)
+    vote.vote_type = int(vote_type)
 
     vote.save()
 
     return True
 
+
+@require_login
 def post_comment_on_topic(request):
     topic_id = request.GET.get('topic_id')
     data = json.loads(request.body)
@@ -137,6 +142,7 @@ def post_comment_on_topic(request):
 
     return True
 
+
 def post_comment_on_comment(request):
     comment_id = request.GET.get('comment_id')
     reply_id = request.GET.get('reply_id', '-1')
@@ -150,17 +156,19 @@ def post_comment_on_comment(request):
 
     return True
 
-def vote_comment(request, comment_id):
+
+@require_login
+def vote_comment(request):
     comment_id = request.GET.get('comment_id')
     comment = Topic.get_by_id(comment_id)
-    type = request.GET.get('type', '1')
+    vote_type = request.GET.get('type', '1')
 
     if not comment:
         return False
 
     vote = VoteOnComment()
     vote.creator = request.current_user
-    vote.vote_type = int(type)
+    vote.vote_type = int(vote_type)
     vote.comment = comment
 
     vote.save()
