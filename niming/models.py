@@ -5,7 +5,7 @@ from django.db import models
 
 VOTE_TYPE = (
     (0, 'up',),
-    (1,'down',),
+    (1, 'down',),
 )
 
 DB_STATUS = (
@@ -14,9 +14,9 @@ DB_STATUS = (
 
 
 class NimingModel(models.Model):
-    @staticmethod
-    def get_by_id(pk):
-        data = list(NimingModel.objects.all().filter(pk=pk))
+    @classmethod
+    def get_by_id(cls, pk):
+        data = list(cls.objects.all().filter(pk=pk))
         if data:
             return data[0]
 
@@ -44,6 +44,7 @@ class User(NimingModel):
             user = User(open_id=open_id)
             user.save()
             return user
+
 
 class Topic(NimingModel):
     create_time = models.DateTimeField(auto_now_add=True)
@@ -75,9 +76,17 @@ class VoteOnTopic(NimingModel):
         votes = VoteOnTopic.objects.all().filter(creator=user, topic=topic)
         if votes:
             vote = votes[0]
-            return vote.type
+            return vote.vote_type
         else:
             return 0
+
+    @staticmethod
+    def create_or_get(user, topic):
+        votes = VoteOnTopic.objects.all().filter(creator=user, topic=topic)
+        if votes:
+            return votes[0]
+        else:
+            return VoteOnTopic(topic=topic, creator=user)
 
 
 class Comment(NimingModel):
@@ -90,7 +99,6 @@ class Comment(NimingModel):
     replies = models.TextField(default='')
     order = models.IntegerField(default=0)
 
-
     @staticmethod
     def all_comments(topic, user):
         raw_comments = Comment.objects.all().filter(topic=topic)
@@ -101,10 +109,11 @@ class Comment(NimingModel):
                 'time': comment.create_time,
                 'vote': {
                     'number': VoteOnComment.vote_of_comment(comment),
-                    'status': VoteOnComment.vote_type(user, comment)
+                    'status': VoteOnComment.vote_status(user, comment)
                 }
             })
 
+        return comments
 
     def reply(self, creator, content, reply_id):
         replies = self.get_replies()
@@ -125,7 +134,7 @@ class VoteOnComment(NimingModel):
     edit_time = models.DateTimeField(auto_now=True)
     creator = models.ForeignKey(User)
     vote_type = models.IntegerField(default=-1, choices=VOTE_TYPE)
-    comment = models.ForeignKey(Topic)
+    comment = models.ForeignKey(Comment)
 
     @staticmethod
     def vote_of_comment(comment):
@@ -141,6 +150,14 @@ class VoteOnComment(NimingModel):
         votes = VoteOnComment.objects.all().filter(creator=user, comment=comment)
         if votes:
             vote = votes[0]
-            return vote.type
+            return vote.vote_type
         else:
             return 0
+
+    @staticmethod
+    def create_or_get(user, comment):
+        votes = VoteOnComment.objects.all().filter(creator=user, comment=comment)
+        if votes:
+            return votes[0]
+        else:
+            return VoteOnComment(comment=comment, creator=user)

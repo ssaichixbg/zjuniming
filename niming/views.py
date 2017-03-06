@@ -84,20 +84,14 @@ def fetch_topics(request):
     for topic in raw_topics:
         comments = Comment.all_comments(topic, request.current_user)
         topics.append({
+            'id': topic.pk,
             'content': topic.content,
             'time': topic.create_time,
             'vote': {
                 'number': VoteOnTopic.vote_of_topic(topic),
                 'status': VoteOnTopic.vote_status(request.current_user, topic)
             },
-            'comments': {
-                'content': 'mock data',
-                'time': 'mock time',
-                'vote': {
-                    'number': 1,
-                    'status': 1,
-                }
-            }
+            'comments': comments
         })
 
     return {
@@ -114,9 +108,7 @@ def vote_topic(request):
     if not topic:
         return False
 
-    vote = VoteOnTopic()
-    vote.creator = request.current_user
-    vote.topic = topic
+    vote = VoteOnTopic.create_or_get(request.current_user, topic)
     vote.vote_type = int(vote_type)
 
     vote.save()
@@ -160,16 +152,14 @@ def post_comment_on_comment(request):
 @require_login
 def vote_comment(request):
     comment_id = request.GET.get('comment_id')
-    comment = Topic.get_by_id(comment_id)
+    comment = Comment.get_by_id(comment_id)
     vote_type = request.GET.get('type', '1')
 
     if not comment:
         return False
 
-    vote = VoteOnComment()
-    vote.creator = request.current_user
+    vote = VoteOnComment.create_or_get(request.current_user, comment)
     vote.vote_type = int(vote_type)
-    vote.comment = comment
 
     vote.save()
 
