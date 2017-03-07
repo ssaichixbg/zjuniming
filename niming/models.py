@@ -4,8 +4,8 @@ import json
 from django.db import models
 
 VOTE_TYPE = (
-    (0, 'up',),
-    (1, 'down',),
+    (1, 'up',),
+    (-1, 'down',),
 )
 
 DB_STATUS = (
